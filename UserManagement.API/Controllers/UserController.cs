@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UserManagement.API.DTOs;
+using UserManagement.API.Services;
 
 namespace UserManagement.API.Controllers
 {
@@ -6,10 +8,20 @@ namespace UserManagement.API.Controllers
     [Route("api/[controller]")]
     public class UserController:ControllerBase
     {
-        [HttpGet]
-        public string Get()
+        private readonly UserService _userService;
+
+        public UserController(UserService userService)
         {
-            return "Success!";
+            _userService = userService;
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<UserResponse>>> GetAll()
+        {
+            var users = await _userService.GetAllAsync();
+            return Ok(users);
+        }
+
+
     }
 }
